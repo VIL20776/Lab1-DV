@@ -3,9 +3,9 @@ using UnityEngine;
 public class player : MonoBehaviour
 {
     [SerializeField] private float speed;
-    [SerializeField] private int coins;
-    [SerializeField] private int health;
     private Rigidbody rb;
+    private int coins = 0;
+    private int health = 3;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -24,7 +24,22 @@ public class player : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Coin")
+        if (other.gameObject.tag == "Coin") {
+            coins += 1;
+            Debug.Log("Coin obtained! Total coins: " + coins);
             Destroy(other.gameObject);
+        }
+    }
+
+    void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.tag == "Trap") {
+            health -= 1;
+            Debug.Log("Daño recibido! Vida restante " + health);
+            if (health <= 0) {
+                Debug.Log("Juego Terminado.");
+                Destroy(gameObject);
+            }
+        }
     }
 }
